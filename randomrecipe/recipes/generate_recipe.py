@@ -1,6 +1,4 @@
 import os
-from time import sleep
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -12,33 +10,42 @@ def get_recipe():
     }
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        soup = BeautifulSoup(response.text, 'html.parser')
-        steps = soup.find_all('div', {'class': 'step_n'})
-        steps_content = []
-        images_content = []
-        recipe_name = 'Курица на бутылке'
-        for i, p in enumerate(steps, 1):
+        # soup = BeautifulSoup(response.text, 'html.parser')
+        # steps = soup.find_all('div', {'class': 'step_n'})
+        # recipe_name = soup.find('h1', class_='title').text
+        # recipe_feature = soup.find('td', class_='padding_l padding_r').find('p').text
+        # recipe_ingredients = soup.find_all('tr', {'class': ['ingr_tr_0', 'ingr_tr_1']})
 
-            steps_content.append(p.find('p').text.strip())
+        data = {
+            'recipe_name': 'recipe_name',
+            'recipe_feature': 'recipe_feature',
+            'recipe_ingredients': [],
+            'steps_content': [],
+            'images_content': [],
+            'is_active': True
+        }
+        # for ingr in recipe_ingredients:
+        #     data['recipe_ingredients'].append(ingr.text.strip())
+        #
+        # for i, p in enumerate(steps, 1):
+        #
+        #     data['steps_content'].append(p.find('p').text.strip())
+        #
+        #     image = p.find('img')
+        #     image_url = 'https:' + image['src'] if image else ''
+        #     if image_url:
+        #         response = requests.get(image_url)
+        #
+        #         if response.status_code == 200:
+        #             if 'step_images' not in os.listdir('./media'):
+        #                 os.makedirs(f'media/step_images/{recipe_name}')
+        #             file_name = f'media/step_images/{recipe_name}/step{i}.jpg'
+        #             with open(file_name, 'wb') as img_file:
+        #                 img_file.write(response.content)
+        #
+        #     data['images_content'].append(file_name)
 
-            image = p.find('img')
-            image_url = image['src'] if image else ''
-
-            if image_url:
-                response = requests.get(f'https:{image_url}')
-
-                if response.status_code == 200:
-                    image_filename = os.path.join('dog_images', f'step{i}.jpg')
-
-                    with open(image_filename, 'wb') as img_file:
-                        img_file.write(response.content)
-
-            images_content.append(image_filename)
-        #'recipe_feature': soup.find('td', {'class': 'padding_l padding_r'}),
-        #'ingridients': soup.find('table', {'class': 'ingr_block'}),
-        #'steps': soup.find('div', {'class': 'step_images_n'}),
-       # }
-        return images_content
+        return data
 
 
 
