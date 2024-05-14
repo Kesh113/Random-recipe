@@ -1,2 +1,7 @@
-<title>{{ recipe.pk }}</title>
-<h1>{{ recipe.recipe_name }}</h1>
+<title>{{ data.pk }}</title>
+<h1>{{ data.recipe_name }}</h1>
+<p>{{data.recipe_feature}}</p>
+{% for i in data.recipe_ingredients %}
+<p>{{i}}</p>
+{% endfor %}
+<p>{{ data.steps_content }}</p>

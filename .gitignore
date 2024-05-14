@@ -1,1 +1,4 @@
 .idea
+.randomrecipe/db.sqlite3
+.randomrecipe/media
+.randomrecipe/recipes/__pycache__
