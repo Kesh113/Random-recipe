@@ -1,7 +1,12 @@
-<title>{{ data.pk }}</title>
-<h1>{{ data.recipe_name }}</h1>
-<p>{{data.recipe_feature}}</p>
-{% for i in data.recipe_ingredients %}
-<p>{{i}}</p>
+<title>{{ main_info.recipe_name }}</title>
+<h1>{{ main_info.recipe_name }}</h1>
+<p>{{main_info.recipe_feature}}</p>
+{% for ingr in ingredients %}
+<p>{{ ingr.ingredient }}</p>
 {% endfor %}
-<p>{{ data.steps_content }}</p>
+{% for i in images %}
+<p><img src="{{ i.image.url }}"></p>
+{% endfor %}
+{% for step in steps %}
+<p>{{ step.step }}</p>
+{% endfor %}
