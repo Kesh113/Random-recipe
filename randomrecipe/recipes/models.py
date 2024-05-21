@@ -19,21 +19,21 @@ class Ingredients(models.Model):
     ingredient = models.TextField(verbose_name='Ингредиент')
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
 
 class StepImages(models.Model):
-    image = models.ImageField(upload_to='step_images/kuritsa-na-butylke/',
+    image = models.ImageField(upload_to='step_images/',
                                        default=None, blank=True, null=True, verbose_name='Фотография к шагу')
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
 class Steps(models.Model):
     step = models.TextField(verbose_name='Шаг приготовления')
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
 
 # class Category(models.Model):

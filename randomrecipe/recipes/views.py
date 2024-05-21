@@ -17,20 +17,19 @@ def index(request):
 
 
 def generation_recipe(request):
-    pass
-#     data = get_recipe()
-#     random_recipe, _ = RecipeModel.objects.get_or_create(defaults=data[0], recipe_name=data[0]['recipe_name'])
-#     for ing in data[1]['ingredient']:
-#         i = Ingredients.objects.create(ingredient=ing)
-#         random_recipe.ingredient.set(Ingredients.objects.filter(id=i.id))
-#     for st in data[2]['step']:
-#         i = Steps.objects.create(step=st)
-#         random_recipe.step.set(Steps.objects.filter(id=i.id))
-#     for im in data[3]['image']:
-#         i = StepImages.objects.create(image=im)
-#         random_recipe.image.set(StepImages.objects.filter(id=i.id))
-#     url = reverse('recipe', kwargs={'recipe_slug': random_recipe.slug })
-#     return HttpResponsePermanentRedirect(url)
+    data = get_recipe()
+    random_recipe, exist = RecipeModel.objects.get_or_create(defaults=data[0], recipe_name=data[0]['recipe_name'])
+    for ing in data[1]['ingredient']:
+        i, _ = Ingredients.objects.get_or_create(ingredient=ing)
+        random_recipe.ingredient.add(i)
+    for st in data[2]['step']:
+        i, _ = Steps.objects.get_or_create(step=st)
+        random_recipe.step.add(i)
+    for im in data[3]['image']:
+        i, _ = StepImages.objects.get_or_create(image=im)
+        random_recipe.image.add(i)
+    url = reverse('recipe', kwargs={'recipe_slug': random_recipe.slug })
+    return HttpResponsePermanentRedirect(url)
 
 def recipe(request, recipe_slug):
     get_recipe = get_object_or_404(RecipeModel, slug=recipe_slug)

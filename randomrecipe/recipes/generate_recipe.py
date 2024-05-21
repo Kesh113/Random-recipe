@@ -10,11 +10,11 @@ def random_num():
     pass
 
 def get_recipe():
-    url = 'https://www.russianfood.com/recipes/recipe.php?rid=120338'
+    url = 'https://www.russianfood.com/recipes/recipe.php?rid=120337'
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
     }
-    response = requests.get(url)
+    response = requests.get(url, headers)
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -50,12 +50,13 @@ def get_recipe():
                     if slug not in os.listdir('media/step_images'):
                         os.makedirs(f'media/step_images/{slug}')
                     file_name = f'media/step_images/{slug}/step{i}.jpg'
+                    for_dct = f'step_images/{slug}/step{i}.jpg'
                     with open(file_name, 'wb') as img_file:
                         img_file.write(response.content)
 
-            data[3]['image'].append(file_name)
+            data[3]['image'].append(for_dct)
 
-        return data
+    return data
 
 
 if __name__ == '__main__':
