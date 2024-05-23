@@ -1,19 +1,23 @@
-import os
+from random import randrange
 
 
 import requests
-from bs4 import BeautifulSoup
 from transliterate import slugify
+from bs4 import BeautifulSoup
+from flask import Flask, render_template
 
 
-def random_num():
-    pass
+app = Flask(__name__)
 
+
+@app.route('/')
 def get_recipe():
-    url = 'https://www.russianfood.com/recipes/recipe.php?rid=120337'
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
     }
+    url = 'https://www.russianfood.com/recipes/recipe.php?rid=' + str(randrange(120000, 170000))
+
+
     response = requests.get(url, headers)
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -22,24 +26,23 @@ def get_recipe():
         slug = slugify(recipe_name)
         recipe_feature = soup.find('td', class_='padding_l padding_r').find('p').text
         ingredients = soup.find_all('tr', {'class': ['ingr_tr_0', 'ingr_tr_1']})
-        steps = soup.find_all('div', {'class': 'step_n'})
+        steps = soup.find_all('div', {'class': 'step_n'}) + soup.find_all('div', {'id': 'how'})
 
-        data = [{
+
+        data = {
             'recipe_name': recipe_name,
             'slug': slug,
             'recipe_feature': recipe_feature,
-            'is_active': True
-        },
-            {'ingredient': []},
-            {'step': []},
-            {'image': []},
-        ]
+            'ingredient': [],
+            'step_image': [],
+        }
+
         for ingr in ingredients:
-            data[1]['ingredient'].append(ingr.text.strip())
+            data['ingredient'].append(ingr.text.strip())
 
-        for i, p in enumerate(steps, 1):
+        for p in steps:
 
-            data[2]['step'].append(p.find('p').text.strip())
+            step = p.find('p').text.strip()
 
             image = p.find('img')
             image_url = 'https:' + image['src'] if image else ''
@@ -47,17 +50,10 @@ def get_recipe():
                 response = requests.get(image_url)
 
                 if response.status_code == 200:
-                    if slug not in os.listdir('media/step_images'):
-                        os.makedirs(f'media/step_images/{slug}')
-                    file_name = f'media/step_images/{slug}/step{i}.jpg'
-                    for_dct = f'step_images/{slug}/step{i}.jpg'
-                    with open(file_name, 'wb') as img_file:
-                        img_file.write(response.content)
+                    data['step_image'].append((image_url, step))
 
-            data[3]['image'].append(for_dct)
-
-    return data
+    print(url, data, steps)
+    return render_template('page.html', data=data)
 
 
-if __name__ == '__main__':
-    print(get_recipe())
+app.run(host='127.0.0.1', port=8000,debug=True)

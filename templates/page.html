@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ data.recipe_name }}</title>
+    <style>
+        body {
+            text-align: center;
+            background: aquamarine;
+            line-height: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ data.recipe_name }}</h1>
+    <p>{{ data.recipe_feature }}</p>
+    <br>
+    <h3>Продукты</h3>
+    {% for ingr in data.ingredient %}
+    <p>{{ ingr }}</p>
+    {% endfor %}
+    <br>
+    <h3>Пошаговый фото рецепт</h3>
+    <div style="steps">
+        {% for st in data.step_image %}
+        <div class="image">
+            <img src="{{ st.0 }}">
+        </div>
+        <div>
+            <p>{{ st.1 }}</p>
+        </div>
+        {% endfor %}
+
+    </div>
+</body>
+</html>

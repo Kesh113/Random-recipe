@@ -1,4 +1,3 @@
-.idea
-.randomrecipe/db.sqlite3
-.randomrecipe/media
-.randomrecipe/recipes/__pycache__
+# created by virtualenv automatically
+.venv/
+.idea/
