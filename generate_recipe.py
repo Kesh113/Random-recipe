@@ -13,10 +13,12 @@ app = Flask(__name__)
 @app.route('/')
 def get_recipe():
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
+        AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 \
+        Safari/537.36"
     }
-    url = 'https://www.russianfood.com/recipes/recipe.php?rid=' + str(randrange(120000, 170000))
-
+    url = 'https://www.russianfood.com/recipes/recipe.php?rid='
+    + str(randrange(120000, 170000))
 
     response = requests.get(url, headers)
     if response.status_code == 200:
@@ -24,10 +26,12 @@ def get_recipe():
 
         recipe_name = soup.find('h1', class_='title').text
         slug = slugify(recipe_name)
-        recipe_feature = soup.find('td', class_='padding_l padding_r').find('p').text
-        ingredients = soup.find_all('tr', {'class': ['ingr_tr_0', 'ingr_tr_1']})
-        steps = soup.find_all('div', {'class': 'step_n'}) + soup.find_all('div', {'id': 'how'})
-
+        recipe_feature = soup.find('td',
+                                   class_='padding_l padding_r').find('p').text
+        ingredients = soup.find_all('tr',
+                                    {'class': ['ingr_tr_0', 'ingr_tr_1']})
+        steps = soup.find_all('div', {'class': 'step_n'})
+        + soup.find_all('div', {'id': 'how'})
 
         data = {
             'recipe_name': recipe_name,
@@ -56,4 +60,4 @@ def get_recipe():
     return render_template('page.html', data=data)
 
 
-app.run(host='127.0.0.1', port=8000,debug=True)
+app.run(host='127.0.0.1', port=8000, debug=True)
