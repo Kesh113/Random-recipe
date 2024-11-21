@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>{{ recipe.title }}</title>
+    <style>
+      body {
+        text-align: center;
+        background: aquamarine;
+        line-height: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>{{ recipe.title }}</h1>
+    <p>{{ recipe.description }}</p>
+    <br>
+    <h3>Продукты</h3>
+    {% for ingredient in recipe.ingredients.all %}
+      <p>{{ ingredient.title }} - {{ ingredient.count }}</p>
+    {% endfor %}
+    <br>
+    <h3>Пошаговый фото рецепт</h3>
+    <div style="steps">
+      {% for step in recipe.steps.all %}
+        {% if step.image %}
+          <div class="image">
+            <img src="{{ step.image }}">
+          </div>
+        {% endif %}
+        <div>
+          <p>{{ step.description }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>

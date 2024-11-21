@@ -1,36 +1,38 @@
+{% load static %}
+{% load django_bootstrap5 %} 
+{% bootstrap_css %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ data.recipe_name }}</title>
-    <style>
-        body {
-            text-align: center;
-            background: aquamarine;
-            line-height: 15px;
-        }
-    </style>
-</head>
-<body>
-    <h1>{{ data.recipe_name }}</h1>
-    <p>{{ data.recipe_feature }}</p>
-    <br>
-    <h3>Продукты</h3>
-    {% for ingr in data.ingredient %}
-    <p>{{ ingr }}</p>
-    {% endfor %}
-    <br>
-    <h3>Пошаговый фото рецепт</h3>
-    <div style="steps">
-        {% for st in data.step_image %}
-        <div class="image">
-            <img src="{{ st.0 }}">
-        </div>
-        <div>
-            <p>{{ st.1 }}</p>
-        </div>
-        {% endfor %}
-
-    </div>
-</body>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% comment %} <link rel="icon" href="{% static 'img/fav/favicon.ico' %}" type="image">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/fav/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/fav/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/fav/favicon-16x16.png' %}"> {% endcomment %}
+    <title>
+      Главная
+    </title>
+    {% comment %} {% bootstrap_css %} {% endcomment %}
+  </head>
+  <body>
+    <main>
+      <div class="container py-5">
+        <div class="col d-flex justify-content-center">
+            <div class="card" style="width: 40rem;">
+              <div class="card-header">
+                  Выбери категорию рандомного рецепта
+              </div>
+              <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                    {% bootstrap_form form %}
+                  {% bootstrap_button button_type="submit" content="Отправить" %}
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+    </main>
+  </body>
 </html>
