@@ -27,17 +27,17 @@ class Index(CreateView):
 
     def form_valid(self, form):
         recipe_data = get_test_dict()
-        try:
-            with atomic():
-                self.object = Recipe.objects.create(
-                    tags=form.cleaned_data['tags'],
-                    category=form.cleaned_data['category'],
-                    user=Session.objects.get(
-                        pk=self.request.session.session_key),
-                    title=recipe_data['title'],
-                    slug=recipe_data['slug'],
-                    description=recipe_data['description'],
-                    )
+        # try:
+        with atomic():
+            self.object, created = Recipe.objects.get_or_create(
+                tags=form.cleaned_data['tags'],
+                category=form.cleaned_data['category'],
+                user=Session.objects.get(
+                    pk=self.request.session.session_key),
+                title=recipe_data['title'],
+                description=recipe_data['description'],
+                )
+            if created:
                 Ingredient.objects.bulk_create([
                     Ingredient(
                         title=title, count=count, recipe=self.object
@@ -50,8 +50,8 @@ class Index(CreateView):
                         description=description, recipe=self.object
                         ) for description in recipe_data['step_description']
                     ])
-        except Exception:
-            return HttpResponse('Ошибка при сохранении рецепта в БД')
+        # except Exception:
+        #     return HttpResponse('Ошибка при сохранении рецепта в БД')
         return redirect(reverse('recipes:detail',
                                 kwargs={'recipe_slug': self.object.slug}))
 

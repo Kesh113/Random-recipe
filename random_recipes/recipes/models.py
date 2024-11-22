@@ -1,7 +1,6 @@
-from django.contrib.sessions.base_session import AbstractBaseSession
 from django.contrib.sessions.models import Session
 from django.db import models
-from django.urls import reverse
+from slugify import slugify
 
 
 class Category(models.Model):
@@ -25,7 +24,7 @@ class Recipe(models.Model):
     user = models.ForeignKey(Session, on_delete=models.CASCADE,
                              verbose_name='Пользователь')
     title = models.CharField('Название', max_length=120)
-    slug = models.SlugField('Слаг', unique=True)
+    slug = models.SlugField('Слаг', max_length=120, unique=True)
     tags = models.CharField('Тэги поиска', max_length=255,
                             default=None, blank=True, null=True)
     description = models.TextField('Описание')
@@ -39,6 +38,11 @@ class Recipe(models.Model):
     title_image = models.ImageField(
         upload_to=recipe_title_image_upload_to,
         default=None, blank=True, null=True, verbose_name="Фото")
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)[:120]
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
